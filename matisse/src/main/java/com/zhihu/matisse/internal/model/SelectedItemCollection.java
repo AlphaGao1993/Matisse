@@ -95,6 +95,11 @@ public class SelectedItemCollection {
             throw new IllegalArgumentException("Can't select images and videos at the same time.");
         }
         boolean added = mItems.add(item);
+
+        if (!mOriginUris.contains(item.uri)) {
+            mOriginUris.add(item.uri);
+        }
+
         if (added) {
             if (mCollectionType == COLLECTION_UNDEFINED) {
                 if (item.isImage()) {
@@ -117,6 +122,9 @@ public class SelectedItemCollection {
 
     public boolean remove(Item item) {
         boolean removed = mItems.remove(item);
+        if (mOriginUris.contains(item.uri)) {
+            mOriginUris.remove(item.uri);
+        }
         if (removed) {
             if (mItems.size() == 0) {
                 mCollectionType = COLLECTION_UNDEFINED;
@@ -149,6 +157,11 @@ public class SelectedItemCollection {
         for (Item item : mItems) {
             uris.add(item.getContentUri());
         }
+        for (Uri uri : mOriginUris) {
+            if (!uris.contains(uri)) {
+                uris.add(uri);
+            }
+        }
         return uris;
     }
 
@@ -156,6 +169,12 @@ public class SelectedItemCollection {
         List<String> paths = new ArrayList<>();
         for (Item item : mItems) {
             paths.add(PathUtils.getPath(mContext, item.getContentUri()));
+        }
+        for (Uri uri : mOriginUris) {
+            String path = PathUtils.getPath(mContext, uri);
+            if (!paths.contains(path)) {
+                paths.add(path);
+            }
         }
         return paths;
     }
@@ -165,7 +184,7 @@ public class SelectedItemCollection {
     }
 
     public boolean isSelected(Item item) {
-        return mItems.contains(item);
+        return mItems.contains(item) || mOriginUris.contains(item.uri);
     }
 
     public IncapableCause isAcceptable(Item item) {
@@ -234,7 +253,7 @@ public class SelectedItemCollection {
     }
 
     public int count() {
-        return mItems.size();
+        return Math.max(mItems.size(), mOriginUris.size());
     }
 
     public int checkedNumOf(Item item) {
