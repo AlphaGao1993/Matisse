@@ -42,7 +42,7 @@ uploadArchives {
         repository(url: "http://alphagao.com:8081/repository/com.yiqizhangda.matisse/") {
             authentication(userName: "gaoyanqiang", password: "gyq19930317")
         }
-        pom.version = "0.0.3"
+        pom.version = "0.0.4"
         pom.artifactId = "matisse"
         pom.groupId = "com.yiqizhangda"
     }

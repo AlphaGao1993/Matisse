@@ -48,6 +48,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
     private UriAdapter mAdapter;
     private ArrayList<Uri> uris = new ArrayList<>();
+    private ArrayList<String> paths = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                 default:
                                     break;
                             }
-                            mAdapter.setData(null, null);
                         } else {
                             Toast.makeText(SampleActivity.this, R.string.permission_request_denied, Toast.LENGTH_LONG)
                                     .show();
@@ -129,10 +129,11 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             uris = (ArrayList<Uri>) Matisse.obtainResult(data);
-            mAdapter.setData(Matisse.obtainResult(data), Matisse.obtainPathResult(data));
-            TextView tv = findViewById(R.id.images_count);
-            tv.setText("数量：" + uris.size());
+            paths = (ArrayList<String>) Matisse.obtainPathResult(data);
+            mAdapter.setData(uris, paths);
         }
+        TextView tv = findViewById(R.id.images_count);
+        tv.setText("数量：" + uris.size());
     }
 
     private static class UriAdapter extends RecyclerView.Adapter<UriAdapter.UriViewHolder> {

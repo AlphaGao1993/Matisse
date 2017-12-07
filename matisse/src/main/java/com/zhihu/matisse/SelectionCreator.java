@@ -299,7 +299,8 @@ public final class SelectionCreator {
     }
 
     public SelectionCreator selectedUris(ArrayList<Uri> uris) {
-        mSelectionSpec.selectedUris = uris;
+        mSelectionSpec.selectedUris.clear();
+        mSelectionSpec.selectedUris.addAll(uris);
         return this;
     }
 }
