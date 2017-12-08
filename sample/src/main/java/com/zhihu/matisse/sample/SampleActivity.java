@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
@@ -90,7 +89,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.85f)
                                             .selectedUris(uris)
-                                            .imageEngine(new GlideEngine())
+                                            .imageEngine(new PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
                                 case R.id.dracula:
@@ -100,7 +99,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .countable(false)
                                             .groupByDate(true)
                                             .maxSelectable(1)
-                                            .imageEngine(new GlideEngine())
+                                            .imageEngine(new PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
                                 default:
