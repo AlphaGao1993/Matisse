@@ -303,4 +303,9 @@ public final class SelectionCreator {
         mSelectionSpec.selectedUris.addAll(uris);
         return this;
     }
+
+    public SelectionCreator applyString(String applyStr) {
+        mSelectionSpec.applyStr = applyStr;
+        return this;
+    }
 }
