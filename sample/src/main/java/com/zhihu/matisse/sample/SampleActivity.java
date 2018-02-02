@@ -86,6 +86,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                             //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .groupByDate(true)
+                                            .applyString("发布")
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.85f)
                                             .selectedUris(uris)

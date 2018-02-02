@@ -50,6 +50,7 @@ public final class SelectionSpec {
     public float thumbnailScale;
     public ImageEngine imageEngine;
     public boolean groupByDate;
+    public String applyStr = "";
     public ArrayList<Uri> selectedUris = new ArrayList<>();
 
     private SelectionSpec() {
@@ -77,6 +78,7 @@ public final class SelectionSpec {
         capture = false;
         captureStrategy = null;
         spanCount = 3;
+        applyStr = "";
         gridExpectedSize = 0;
         thumbnailScale = 0.5f;
         imageEngine = new ImageEngine() {

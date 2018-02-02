@@ -27,7 +27,7 @@ public class PreviewViewPager extends ViewPager {
     public PreviewViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
+    
     @Override
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
         if (v instanceof ImageViewTouch) {

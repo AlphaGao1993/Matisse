@@ -39,10 +39,10 @@ ext.supportLibVersion = '27.0.2'
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: "http://alphagao.com:8081/repository/com.yiqizhangda.matisse/") {
-            authentication(userName: "gaoyanqiang", password: "gyq19930317")
+        repository(url: "http://101.132.168.203:8081/repository/com.yiqizhangda.matisse/") {
+            authentication(userName: "kid17-Android", password: "kid17.com")
         }
-        pom.version = "0.0.6"
+        pom.version = "0.0.9"
         pom.artifactId = "matisse"
         pom.groupId = "com.yiqizhangda"
     }
