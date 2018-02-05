@@ -39,6 +39,7 @@
         <item name="preview.bottomToolbar.apply.textColor">@color/zhihu_preview_bottom_toolbar_apply</item>
         <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>
         <item name="capture.textColor">@color/zhihu_capture</item>
+        <item name="apply_btn_bg">@color/dracula_capture</item>
     </style>
 
     <style name="Toolbar.Zhihu" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -73,6 +74,7 @@
         <item name="android:listPopupWindowStyle">@style/Popup.Dracula</item>
         <item name="listPopupWindowStyle">@style/Popup.Dracula</item>
         <item name="capture.textColor">@color/dracula_capture</item>
+        <item name="apply_btn_bg">@color/dracula_capture</item>
     </style>
 
     <style name="Toolbar.Dracula" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
