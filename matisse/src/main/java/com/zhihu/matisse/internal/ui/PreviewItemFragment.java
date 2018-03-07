@@ -37,6 +37,7 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 public class PreviewItemFragment extends Fragment {
 
     private static final String ARGS_ITEM = "args_item";
+    private View.OnClickListener singleTapListener;
 
     public static PreviewItemFragment newInstance(Item item) {
         PreviewItemFragment fragment = new PreviewItemFragment();
@@ -78,8 +79,16 @@ public class PreviewItemFragment extends Fragment {
             videoPlayButton.setVisibility(View.GONE);
         }
 
-        ImageViewTouch image = (ImageViewTouch) view.findViewById(R.id.image_view);
+        final ImageViewTouch image = (ImageViewTouch) view.findViewById(R.id.image_view);
         image.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        image.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+            @Override
+            public void onSingleTapConfirmed() {
+                if (singleTapListener != null) {
+                    singleTapListener.onClick(image);
+                }
+            }
+        });
 
         Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
         if (item.isGif()) {
@@ -95,5 +104,9 @@ public class PreviewItemFragment extends Fragment {
         if (getView() != null) {
             ((ImageViewTouch) getView().findViewById(R.id.image_view)).resetMatrix();
         }
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        singleTapListener = listener;
     }
 }

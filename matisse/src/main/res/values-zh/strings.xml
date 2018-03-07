@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2017 Zhihu Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +32,9 @@
     <!--<string name="error_type_conflict">不能同时选择图片和视频</string>-->
     <string name="error_type_conflict">不支持的文件类型</string>
     <string name="error_no_video_activity">没有支持视频预览的应用</string>
-    
+
     <string name="date_format">yyyy年MM月dd日</string>
     <string name="today">今天</string>
+    <string name="switch_album">切换相册</string>
+    <string name="upload_original">所有图片将原图上传</string>
 </resources>

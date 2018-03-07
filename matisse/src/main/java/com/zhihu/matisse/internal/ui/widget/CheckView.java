@@ -40,8 +40,8 @@ public class CheckView extends View {
     private static final float STROKE_WIDTH = 2.0f; // dp
     private static final float SHADOW_WIDTH = 6.0f; // dp
     private static final int SIZE = 48; // dp
-    private static final float STROKE_RADIUS = 11.5f; // dp
-    private static final float BG_RADIUS = 13.0f; // dp
+    private static final float STROKE_RADIUS = 13.0f; // dp
+    private static final float BG_RADIUS = 11.5f; // dp
     private static final int CONTENT_SIZE = 16; // dp
     private boolean mCountable;
     private boolean mChecked;
@@ -54,6 +54,8 @@ public class CheckView extends View {
     private float mDensity;
     private Rect mCheckRect;
     private boolean mEnabled = true;
+    private int checkedColor;
+    private int unCheckColor;
 
     public CheckView(Context context) {
         super(context);
@@ -85,16 +87,22 @@ public class CheckView extends View {
         mStrokePaint.setStyle(Paint.Style.STROKE);
         mStrokePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
         mStrokePaint.setStrokeWidth(STROKE_WIDTH * mDensity);
-        TypedArray ta = getContext().getTheme().obtainStyledAttributes(new int[]{R.attr.item_checkCircle_borderColor});
+        TypedArray ta = getContext().getTheme().obtainStyledAttributes(
+                new int[]{R.attr.item_checkCircle_borderColor
+                        , R.attr.item_checkCircle_backgroundColor_unCheck
+                        , R.attr.item_checkCircle_backgroundColor});
         int defaultColor = ResourcesCompat.getColor(
                 getResources(), R.color.zhihu_item_checkCircle_borderColor,
                 getContext().getTheme());
         int color = ta.getColor(0, defaultColor);
+        unCheckColor = ta.getColor(1, defaultColor);
+        checkedColor = ta.getColor(2, defaultColor);
         ta.recycle();
         mStrokePaint.setColor(color);
 
         mCheckDrawable = ResourcesCompat.getDrawable(context.getResources(),
                 R.drawable.ic_check_white_18dp, context.getTheme());
+
     }
 
     public void setChecked(boolean checked) {
@@ -134,20 +142,10 @@ public class CheckView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        // draw outer and inner shadow
-        initShadowPaint();
-        canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
-                (STROKE_RADIUS + STROKE_WIDTH / 2 + SHADOW_WIDTH) * mDensity, mShadowPaint);
-
-        // draw white stroke
-        canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
-                STROKE_RADIUS * mDensity, mStrokePaint);
-
-        // draw content
+        initBackgroundPaint();
         if (mCountable) {
+            //计数模式下未勾选
             if (mCheckedNum != UNCHECKED) {
-                initBackgroundPaint();
                 canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
                         BG_RADIUS * mDensity, mBackgroundPaint);
                 initTextPaint();
@@ -155,17 +153,30 @@ public class CheckView extends View {
                 int baseX = (int) (canvas.getWidth() - mTextPaint.measureText(text)) / 2;
                 int baseY = (int) (canvas.getHeight() - mTextPaint.descent() - mTextPaint.ascent()) / 2;
                 canvas.drawText(text, baseX, baseY, mTextPaint);
-            }
-        } else {
-            if (mChecked) {
-                initBackgroundPaint();
+            } else {//已勾选
                 canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
                         BG_RADIUS * mDensity, mBackgroundPaint);
+            }
+        } else {
 
+            if (mChecked) {
+                canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
+                        BG_RADIUS * mDensity, mBackgroundPaint);
                 mCheckDrawable.setBounds(getCheckRect());
                 mCheckDrawable.draw(canvas);
+            } else {
+                //mBackgroundPaint.setColor(unCheckColor);
+                canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
+                        BG_RADIUS * mDensity, mBackgroundPaint);
             }
         }
+        // draw outer and inner shadow
+        //initShadowPaint();
+        /*canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
+                (STROKE_RADIUS + STROKE_WIDTH / 2 + SHADOW_WIDTH) * mDensity, mShadowPaint);*/
+        // draw white stroke
+        canvas.drawCircle((float) SIZE * mDensity / 2, (float) SIZE * mDensity / 2,
+                STROKE_RADIUS * mDensity, mStrokePaint);
 
         // enable hint
         setAlpha(mEnabled ? 1.0f : 0.5f);
@@ -199,14 +210,13 @@ public class CheckView extends View {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setAntiAlias(true);
             mBackgroundPaint.setStyle(Paint.Style.FILL);
-            TypedArray ta = getContext().getTheme()
-                    .obtainStyledAttributes(new int[]{R.attr.item_checkCircle_backgroundColor});
-            int defaultColor = ResourcesCompat.getColor(
-                    getResources(), R.color.zhihu_item_checkCircle_backgroundColor,
-                    getContext().getTheme());
-            int color = ta.getColor(0, defaultColor);
-            ta.recycle();
-            mBackgroundPaint.setColor(color);
+        }
+        if (mChecked) {
+            mBackgroundPaint.setColor(checkedColor);
+        } else if (mCountable && mCheckedNum != UNCHECKED) {
+            mBackgroundPaint.setColor(checkedColor);
+        } else {
+            mBackgroundPaint.setColor(unCheckColor);
         }
     }
 
