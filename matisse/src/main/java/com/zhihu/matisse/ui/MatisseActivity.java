@@ -34,6 +34,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zhihu.matisse.R;
@@ -59,10 +60,10 @@ import java.util.ArrayList;
  * and also support media selecting operations.
  */
 public class MatisseActivity extends AppCompatActivity implements
-        AlbumCollection.AlbumCallbacks, AdapterView.OnItemSelectedListener,
+        AlbumCollection.AlbumCallbacks,
         MediaSelectionFragment.SelectionProvider, View.OnClickListener,
         AlbumMediaAdapter.CheckStateListener, AlbumMediaAdapter.OnMediaClickListener,
-        AlbumMediaAdapter.OnPhotoCapture {
+        AlbumMediaAdapter.OnPhotoCapture,AdapterView.OnItemClickListener {
 
     public static final String EXTRA_RESULT_SELECTION = "extra_result_selection";
     public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
@@ -79,6 +80,8 @@ public class MatisseActivity extends AppCompatActivity implements
     private TextView mButtonApply;
     private View mContainer;
     private View mEmptyView;
+    private ListView mListView;
+    private TextView mSelectedAlbum;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,11 +126,20 @@ public class MatisseActivity extends AppCompatActivity implements
         updateBottomToolbar();
 
         mAlbumsAdapter = new AlbumsAdapter(this, null, false);
-        mAlbumsSpinner = new AlbumsSpinner(this);
-        mAlbumsSpinner.setOnItemSelectedListener(this);
-        mAlbumsSpinner.setSelectedTextView((TextView) findViewById(R.id.selected_album));
-        mAlbumsSpinner.setPopupAnchorView(findViewById(R.id.toolbar));
-        mAlbumsSpinner.setAdapter(mAlbumsAdapter);
+        mSelectedAlbum= findViewById(R.id.selected_album);
+        mListView=findViewById(R.id.listview);
+        mListView.setOnItemClickListener(this);
+        mListView.setAdapter(mAlbumsAdapter);
+        mSelectedAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListView.getVisibility()==View.GONE){
+                    mListView.setVisibility(View.VISIBLE);
+                }else{
+                    mListView.setVisibility(View.GONE);
+                }
+            }
+        });
         mAlbumCollection.onCreate(this, this);
         mAlbumCollection.onRestoreInstanceState(savedInstanceState);
         mAlbumCollection.loadAlbums();
@@ -286,19 +298,20 @@ public class MatisseActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(mListView.getVisibility()==View.GONE){
+            mListView.setVisibility(View.VISIBLE);
+        }else{
+            mListView.setVisibility(View.GONE);
+        }
         mAlbumCollection.setStateCurrentSelection(position);
         mAlbumsAdapter.getCursor().moveToPosition(position);
         Album album = Album.valueOf(mAlbumsAdapter.getCursor());
         if (album.isAll() && SelectionSpec.getInstance().capture) {
             album.addCaptureCount();
         }
+        mSelectedAlbum.setText(album.getDisplayName(this));
         onAlbumSelected(album);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -311,8 +324,6 @@ public class MatisseActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 cursor.moveToPosition(mAlbumCollection.getCurrentSelection());
-                mAlbumsSpinner.setSelection(MatisseActivity.this,
-                        mAlbumCollection.getCurrentSelection());
                 Album album = Album.valueOf(cursor);
                 if (album.isAll() && SelectionSpec.getInstance().capture) {
                     album.addCaptureCount();
