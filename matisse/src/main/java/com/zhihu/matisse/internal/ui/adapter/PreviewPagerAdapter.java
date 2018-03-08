@@ -18,6 +18,7 @@ package com.zhihu.matisse.internal.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.zhihu.matisse.internal.entity.Item;
@@ -30,6 +31,7 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Item> mItems = new ArrayList<>();
     private OnPrimaryItemSetListener mListener;
+    private View.OnClickListener mClickListener;
 
     public PreviewPagerAdapter(FragmentManager manager, OnPrimaryItemSetListener listener) {
         super(manager);
@@ -38,7 +40,11 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PreviewItemFragment.newInstance(mItems.get(position));
+        PreviewItemFragment fragment = PreviewItemFragment.newInstance(mItems.get(position));
+        if (mClickListener != null) {
+            fragment.setOnClickListener(mClickListener);
+        }
+        return fragment;
     }
 
     @Override
@@ -60,6 +66,10 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     public void addAll(List<Item> items) {
         mItems.addAll(items);
+    }
+
+    public void setImageClickListener(View.OnClickListener listener) {
+        mClickListener = listener;
     }
 
     interface OnPrimaryItemSetListener {

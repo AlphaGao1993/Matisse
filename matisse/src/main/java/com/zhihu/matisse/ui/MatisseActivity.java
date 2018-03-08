@@ -34,6 +34,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -63,7 +64,7 @@ public class MatisseActivity extends AppCompatActivity implements
         AlbumCollection.AlbumCallbacks,
         MediaSelectionFragment.SelectionProvider, View.OnClickListener,
         AlbumMediaAdapter.CheckStateListener, AlbumMediaAdapter.OnMediaClickListener,
-        AlbumMediaAdapter.OnPhotoCapture,AdapterView.OnItemClickListener {
+        AlbumMediaAdapter.OnPhotoCapture, AdapterView.OnItemClickListener {
 
     public static final String EXTRA_RESULT_SELECTION = "extra_result_selection";
     public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
@@ -81,7 +82,8 @@ public class MatisseActivity extends AppCompatActivity implements
     private View mContainer;
     private View mEmptyView;
     private ListView mListView;
-    private TextView mSelectedAlbum;
+    private TextView mCurrentAlbum;
+    private FrameLayout bottomToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,13 +109,17 @@ public class MatisseActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         Drawable navigationIcon = toolbar.getNavigationIcon();
         TypedArray ta = getTheme().obtainStyledAttributes(new int[]{R.attr.album_element_color});
         int color = ta.getColor(0, 0);
         ta.recycle();
-        navigationIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        if (navigationIcon != null) {
+            navigationIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        }
 
         mButtonPreview = (TextView) findViewById(R.id.button_preview);
         mButtonApply = (TextView) findViewById(R.id.button_apply);
@@ -126,18 +132,17 @@ public class MatisseActivity extends AppCompatActivity implements
         updateBottomToolbar();
 
         mAlbumsAdapter = new AlbumsAdapter(this, null, false);
-        mSelectedAlbum= findViewById(R.id.selected_album);
-        mListView=findViewById(R.id.listview);
+        TextView mSwitchAlbum = findViewById(R.id.selected_album);
+        bottomToolbar = findViewById(R.id.bottom_toolbar);
+        mCurrentAlbum = findViewById(R.id.tv_album_name);
+        mListView = findViewById(R.id.listview);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAlbumsAdapter);
-        mSelectedAlbum.setOnClickListener(new View.OnClickListener() {
+        mSwitchAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mListView.getVisibility()==View.GONE){
-                    mListView.setVisibility(View.VISIBLE);
-                }else{
-                    mListView.setVisibility(View.GONE);
-                }
+                bottomToolbar.setVisibility(View.GONE);
+                mListView.setVisibility(View.VISIBLE);
             }
         });
         mAlbumCollection.onCreate(this, this);
@@ -254,7 +259,8 @@ public class MatisseActivity extends AppCompatActivity implements
             mButtonPreview.setEnabled(false);
             mButtonApply.setEnabled(false);
             if (!"".equals(mSpec.applyStr)) {
-                mButtonApply.setText(mSpec.applyStr);
+                mButtonApply.setText(mSpec.applyStr + "(" + mSelectedCollection.count() + "/" + mSpec.maxSelectable + ")");
+                //mButtonApply.setText(mSpec.applyStr);
             } else {
                 mButtonApply.setText(getString(R.string.button_apply_default));
             }
@@ -270,7 +276,7 @@ public class MatisseActivity extends AppCompatActivity implements
             mButtonPreview.setEnabled(true);
             mButtonApply.setEnabled(true);
             if (!"".equals(mSpec.applyStr)) {
-                mButtonApply.setText(mSpec.applyStr + "(" + selectedCount + ")");
+                mButtonApply.setText(mSpec.applyStr + "(" + selectedCount + "/" + mSpec.maxSelectable + ")");
             } else {
                 mButtonApply.setText(getString(R.string.button_apply, selectedCount));
             }
@@ -299,18 +305,15 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(mListView.getVisibility()==View.GONE){
-            mListView.setVisibility(View.VISIBLE);
-        }else{
-            mListView.setVisibility(View.GONE);
-        }
+        bottomToolbar.setVisibility(View.VISIBLE);
+        mListView.setVisibility(View.GONE);
         mAlbumCollection.setStateCurrentSelection(position);
         mAlbumsAdapter.getCursor().moveToPosition(position);
         Album album = Album.valueOf(mAlbumsAdapter.getCursor());
         if (album.isAll() && SelectionSpec.getInstance().capture) {
             album.addCaptureCount();
         }
-        mSelectedAlbum.setText(album.getDisplayName(this));
+        mCurrentAlbum.setText(album.getDisplayName(this));
         onAlbumSelected(album);
     }
 

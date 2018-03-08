@@ -35,6 +35,6 @@
 
     <string name="date_format">yyyy-MM-dd</string>
     <string name="today">Today</string>
-    <string name="all_album">全部</string>
-    <string name="upload_original">点击图片将原图上传</string>
+    <string name="switch_album">Switch Album</string>
+    <string name="upload_original">all photos will upload in origin size</string>
 </resources>

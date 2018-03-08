@@ -29,6 +29,7 @@ import com.zhihu.matisse.internal.utils.PathUtils;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -253,9 +254,16 @@ public class SelectedItemCollection {
     }
 
     public int count() {
-        return Math.max(mItems.size(), mOriginUris.size());
+        int count = 0;
+        if (mItems != null) {
+            count = Math.max(count, mItems.size());
+        }
+        if (mOriginUris != null) {
+            count = Math.max(mOriginUris.size(), count);
+        }
+        return count;
     }
-
+    
     public int checkedNumOf(Item item) {
         int index = new ArrayList<>(mItems).indexOf(item);
         return index == -1 ? CheckView.UNCHECKED : index + 1;

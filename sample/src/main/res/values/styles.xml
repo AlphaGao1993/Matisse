@@ -20,7 +20,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
-
+    
     <style name="ZhihuOverlay" parent="ThemeOverlay.AppCompat">
         <item name="colorButtonNormal">@color/zhihu_primary</item>
     </style>

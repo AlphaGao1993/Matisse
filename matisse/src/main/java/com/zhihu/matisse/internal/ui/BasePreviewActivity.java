@@ -23,6 +23,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhihu.matisse.R;
@@ -49,11 +52,13 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     protected PreviewPagerAdapter mAdapter;
 
     protected CheckView mCheckView;
-    protected TextView mButtonBack;
+    protected ImageView mButtonBack;
     protected TextView mButtonApply;
     protected TextView mSize;
 
     protected int mPreviousPos = -1;
+    private FrameLayout bottomToolbar;
+    private boolean isToolbarVisible = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         setContentView(R.layout.activity_media_preview);
         if (Platform.hasKitKat()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         mSpec = SelectionSpec.getInstance();
@@ -75,15 +81,32 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
             mSelectedCollection.onCreate(savedInstanceState, mSpec.selectedUris);
         }
 
-        mButtonBack = (TextView) findViewById(R.id.button_back);
+        mButtonBack = (ImageView) findViewById(R.id.button_back);
         mButtonApply = (TextView) findViewById(R.id.button_apply);
         mSize = (TextView) findViewById(R.id.size);
         mButtonBack.setOnClickListener(this);
         mButtonApply.setOnClickListener(this);
+        bottomToolbar = findViewById(R.id.bottom_toolbar);
 
         mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.requestDisallowInterceptTouchEvent(false);
         mPager.addOnPageChangeListener(this);
+        mPager.setOnClickListener(this);
         mAdapter = new PreviewPagerAdapter(getSupportFragmentManager(), null);
+        mAdapter.setImageClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isToolbarVisible) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    bottomToolbar.animate().setDuration(200).translationY(-bottomToolbar.getMeasuredHeight());
+                    isToolbarVisible = false;
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    bottomToolbar.animate().setDuration(200).translationY(0);
+                    isToolbarVisible = true;
+                }
+            }
+        });
         mPager.setAdapter(mAdapter);
         mCheckView = (CheckView) findViewById(R.id.check_view);
         mCheckView.setCountable(mSpec.countable);
