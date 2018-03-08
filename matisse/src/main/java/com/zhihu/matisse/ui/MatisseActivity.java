@@ -53,6 +53,7 @@ import com.zhihu.matisse.internal.ui.adapter.AlbumsAdapter;
 import com.zhihu.matisse.internal.ui.widget.AlbumsSpinner;
 import com.zhihu.matisse.internal.utils.MediaStoreCompat;
 import com.zhihu.matisse.internal.utils.PathUtils;
+import com.zhihu.matisse.internal.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 
@@ -108,6 +109,8 @@ public class MatisseActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        StatusBarUtil.Companion.darkMode(this);
+        StatusBarUtil.Companion.setPaddingSmart(this, toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
@@ -143,6 +146,7 @@ public class MatisseActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 bottomToolbar.setVisibility(View.GONE);
                 mListView.setVisibility(View.VISIBLE);
+                mCurrentAlbum.setText(getString(R.string.my_album));
             }
         });
         mAlbumCollection.onCreate(this, this);
