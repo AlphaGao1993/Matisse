@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
 apply plugin: 'maven'
 
@@ -55,6 +56,7 @@ dependencies {
     implementation "com.android.support:support-annotations:${supportLibVersion}"
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation 'it.sephiroth.android.library.imagezoom:library:1.0.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //compileOnly 'com.github.bumptech.glide:glide:4.1.1'
 }
 
@@ -66,4 +68,7 @@ task checkstyle(type: Checkstyle) {
     showViolations true
     classpath = files()
     source 'src/main/java'
+}
+repositories {
+    mavenCentral()
 }
