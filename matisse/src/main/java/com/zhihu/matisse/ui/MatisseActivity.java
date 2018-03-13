@@ -130,6 +130,7 @@ public class MatisseActivity extends AppCompatActivity implements
         mButtonApply.setOnClickListener(this);
         mContainer = findViewById(R.id.container);
         mEmptyView = findViewById(R.id.empty_view);
+        mCurrentAlbum = findViewById(R.id.tv_album_name);
 
         mSelectedCollection.onCreate(savedInstanceState, mSpec.selectedUris);
         updateBottomToolbar();
@@ -137,7 +138,6 @@ public class MatisseActivity extends AppCompatActivity implements
         mAlbumsAdapter = new AlbumsAdapter(this, null, false);
         TextView mSwitchAlbum = findViewById(R.id.selected_album);
         bottomToolbar = findViewById(R.id.bottom_toolbar);
-        mCurrentAlbum = findViewById(R.id.tv_album_name);
         mListView = findViewById(R.id.listview);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAlbumsAdapter);

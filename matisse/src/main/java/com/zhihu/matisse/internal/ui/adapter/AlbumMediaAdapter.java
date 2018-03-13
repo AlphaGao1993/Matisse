@@ -77,7 +77,7 @@ public class AlbumMediaAdapter extends
      */
     private SparseIntArray cursorToDateMap = new SparseIntArray();
     private List<String> mDateList = new ArrayList<>();
-    private List<Uri> mSelectedUris ;
+    private List<Uri> mSelectedUris;
 
     public AlbumMediaAdapter(Context context, SelectedItemCollection selectedCollection, RecyclerView recyclerView, List<Uri> selectedUris) {
         super(null);
@@ -115,9 +115,13 @@ public class AlbumMediaAdapter extends
         while (mCursor.moveToNext()) {
             String date = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN));
             if (!TextUtils.isEmpty(date)) {
-                String format = getFormatDate(new Date(Long.valueOf(date)));
-                if (!mDateList.contains(format)) {
-                    mDateList.add(format);
+                try {
+                    String format = getFormatDate(new Date(Long.valueOf(date)));
+                    if (!mDateList.contains(format)) {
+                        mDateList.add(format);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
                 int cursorPos = mCursor.getPosition();
                 cursorToDateMap.put(mCursor.getPosition(), mDateList.size() - 1);
@@ -200,7 +204,7 @@ public class AlbumMediaAdapter extends
                 }
                 //onCheckViewClicked((CheckView) mediaViewHolder.mMediaGrid.findViewById(R.id.check_view), item, mediaViewHolder);
             }
-            
+
             mediaViewHolder.mMediaGrid.preBindMedia(new MediaGrid.PreBindInfo(
                     getImageResize(mediaViewHolder.mMediaGrid.getContext()),
                     mPlaceholder,
@@ -419,15 +423,15 @@ public class AlbumMediaAdapter extends
         calendar.setTime(date);
         SimpleDateFormat format = new SimpleDateFormat(mContext.getString(R.string.date_format), Locale.CHINA);
 
-        if (today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) 
-                && today.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) 
+        if (today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+                && today.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
                 && today.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)) {
             return mContext.getString(R.string.today);
         } else if (today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
             return format.format(date).substring(5);
         } else {
             return format.format(date);
-        } 
+        }
     }
 
     public interface CheckStateListener {
