@@ -29,8 +29,8 @@ import com.zhihu.matisse.internal.utils.PathUtils;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -57,7 +57,7 @@ public class SelectedItemCollection {
     public static final int COLLECTION_MIXED = COLLECTION_IMAGE | COLLECTION_VIDEO;
     private final Context mContext;
     private Set<Item> mItems;
-    private ArrayList<Uri> mOriginUris;
+    private LinkedList<Uri> mOriginUris;
     private int mCollectionType = COLLECTION_UNDEFINED;
 
     public SelectedItemCollection(Context context) {
@@ -72,7 +72,9 @@ public class SelectedItemCollection {
             mItems = new LinkedHashSet<>(saved);
             mCollectionType = bundle.getInt(STATE_COLLECTION_TYPE, COLLECTION_UNDEFINED);
         }
-        mOriginUris = originUris;
+        LinkedList<Uri> origin = new LinkedList<>();
+        origin.addAll(originUris);
+        mOriginUris = origin;
     }
 
     public void setDefaultSelection(List<Item> uris) {
@@ -155,12 +157,11 @@ public class SelectedItemCollection {
 
     public List<Uri> asListOfUri() {
         List<Uri> uris = new ArrayList<>();
+
+        uris.addAll(mOriginUris);
         for (Item item : mItems) {
-            uris.add(item.getContentUri());
-        }
-        for (Uri uri : mOriginUris) {
-            if (!uris.contains(uri)) {
-                uris.add(uri);
+            if (!uris.contains(item.getContentUri())) {
+                uris.add(item.getContentUri());
             }
         }
         return uris;
@@ -168,11 +169,11 @@ public class SelectedItemCollection {
 
     public List<String> asListOfString() {
         List<String> paths = new ArrayList<>();
-        for (Item item : mItems) {
-            paths.add(PathUtils.getPath(mContext, item.getContentUri()));
-        }
         for (Uri uri : mOriginUris) {
-            String path = PathUtils.getPath(mContext, uri);
+            paths.add(PathUtils.getPath(mContext, uri));
+        }
+        for (Item item : mItems) {
+            String path = PathUtils.getPath(mContext, item.getContentUri());
             if (!paths.contains(path)) {
                 paths.add(path);
             }
@@ -263,9 +264,15 @@ public class SelectedItemCollection {
         }
         return count;
     }
-    
+
     public int checkedNumOf(Item item) {
-        int index = new ArrayList<>(mItems).indexOf(item);
-        return index == -1 ? CheckView.UNCHECKED : index + 1;
+        //int index = new ArrayList<>(mItems).indexOf(item);
+        int uriIndex = checkedNumOf(item.uri);
+        return uriIndex == -1 ? CheckView.UNCHECKED : uriIndex + 1;
+        //return index == -1 ? CheckView.UNCHECKED : index + 1;
+    }
+
+    public int checkedNumOf(Uri uri) {
+        return mOriginUris.indexOf(uri);
     }
 }
