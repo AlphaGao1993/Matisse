@@ -308,4 +308,10 @@ public final class SelectionCreator {
         mSelectionSpec.applyStr = applyStr;
         return this;
     }
+
+    public SelectionCreator hideCheckViewOnSingleMode(boolean hideView) {
+        mSelectionSpec.hideCheckView = hideView;
+        mSelectionSpec.selectedUris.clear();
+        return this;
+    }
 }

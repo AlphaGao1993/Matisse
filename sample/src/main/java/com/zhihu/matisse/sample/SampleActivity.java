@@ -80,6 +80,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .choose(MimeType.of(MimeType.JPEG, MimeType.PNG))
                                             .groupByDate(true)
                                             .countable(false)
+                                            .hideCheckViewOnSingleMode(true)
                                             .maxSelectable(80)
                                             //.capture(false)
                                             .spanCount(4)
@@ -89,7 +90,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .applyString("发布")
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .theme(R.style.Matisse_Zhihu)
-                                            .selectedUris(uris)
+                                            //.selectedUris(uris)
                                             .thumbnailScale(0.85f)
                                             .imageEngine(new PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);

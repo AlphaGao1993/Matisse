@@ -43,7 +43,7 @@ uploadArchives {
         repository(url: "http://101.132.168.203:8081/repository/android-lib/") {
             authentication(userName: "kid17-Android", password: "kid17.com")
         }
-        pom.version = "0.0.13"
+        pom.version = "0.0.14"
         pom.artifactId = "matisse"
         pom.groupId = "com.yiqizhangda"
     }

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhihu.matisse.R;
+import com.zhihu.matisse.SelectionCreator;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 
@@ -95,6 +96,11 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
 
     private void initCheckView() {
         mCheckView.setCountable(mPreBindInfo.mCheckViewCountable);
+        if (SelectionSpec.getInstance().hideCheckView) {
+            mCheckView.setVisibility(View.GONE);
+        } else {
+            mCheckView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setCheckEnabled(boolean enabled) {
@@ -118,7 +124,7 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
                     mPreBindInfo.mPlaceholder, mThumbnail, mMedia.getContentUri());
         }
     }
-    
+
     private void setVideoDuration() {
         if (mMedia.isVideo()) {
             mVideoDuration.setVisibility(VISIBLE);
