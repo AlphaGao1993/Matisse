@@ -294,17 +294,21 @@ public class MatisseActivity extends AppCompatActivity implements
             intent.putExtra(BasePreviewActivity.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
             startActivityForResult(intent, REQUEST_CODE_PREVIEW);
         } else if (v.getId() == R.id.button_apply) {
-            Intent result = new Intent();
-            ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
-            ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
-
-            addOriginSelected(selectedUris, selectedPaths);
-
-            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
-            result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
-            setResult(RESULT_OK, result);
-            finish();
+            confirmSelect();
         }
+    }
+
+    private void confirmSelect() {
+        Intent result = new Intent();
+        ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
+        ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
+
+        addOriginSelected(selectedUris, selectedPaths);
+
+        result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
+        result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
+        setResult(RESULT_OK, result);
+        finish();
     }
 
     @Override
@@ -368,6 +372,14 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void onMediaClick(Album album, Item item, int adapterPosition) {
+        if (mSpec.hideCheckView) {
+            mSelectedCollection.add(item);
+            if (!mSpec.selectedUris.contains(item.uri)) {
+                mSpec.selectedUris.add(item.uri);
+            }
+            confirmSelect();
+            return;
+        }
         Intent intent = new Intent(this, AlbumPreviewActivity.class);
         intent.putExtra(AlbumPreviewActivity.EXTRA_ALBUM, album);
         intent.putExtra(AlbumPreviewActivity.EXTRA_ITEM, item);
