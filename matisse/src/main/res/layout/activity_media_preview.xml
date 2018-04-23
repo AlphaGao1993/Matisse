@@ -62,8 +62,8 @@
             android:background="?attr/apply_btn_bg"
             android:foreground="?selectableItemBackground"
             android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:textColor="?attr/preview.bottomToolbar.apply.textColor"
             android:textSize="16sp" />
@@ -71,18 +71,20 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/check_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
         android:fitsSystemWindows="true">
 
         <com.zhihu.matisse.internal.ui.widget.CheckView
             android:id="@+id/check_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical|end" />
     </FrameLayout>
 
 </RelativeLayout>
