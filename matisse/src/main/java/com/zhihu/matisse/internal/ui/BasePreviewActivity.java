@@ -52,6 +52,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     protected PreviewPagerAdapter mAdapter;
 
     protected CheckView mCheckView;
+    protected FrameLayout mCheckLayout;
     protected ImageView mButtonBack;
     protected TextView mButtonApply;
     protected TextView mSize;
@@ -99,16 +100,19 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
                 if (isToolbarVisible) {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     bottomToolbar.animate().setDuration(200).translationY(-bottomToolbar.getMeasuredHeight());
+                    mCheckLayout.animate().setDuration(200).translationY(mCheckLayout.getMeasuredHeight());
                     isToolbarVisible = false;
                 } else {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     bottomToolbar.animate().setDuration(200).translationY(0);
+                    mCheckLayout.animate().setDuration(200).translationY(0);
                     isToolbarVisible = true;
                 }
             }
         });
         mPager.setAdapter(mAdapter);
         mCheckView = (CheckView) findViewById(R.id.check_view);
+        mCheckLayout = (FrameLayout) findViewById(R.id.check_layout);
         mCheckView.setCountable(mSpec.countable);
 
         mCheckView.setOnClickListener(new View.OnClickListener() {

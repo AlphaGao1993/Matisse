@@ -77,10 +77,10 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                             switch (v.getId()) {
                                 case R.id.zhihu:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.of(MimeType.JPEG, MimeType.PNG))
+                                            .choose(MimeType.ofImage())
                                             .groupByDate(true)
-                                            .countable(false)
-                                            .hideCheckViewOnSingleMode(true)
+                                            .countable(true)
+                                            //.hideCheckViewOnSingleMode(true)
                                             .maxSelectable(80)
                                             //.capture(false)
                                             .spanCount(4)
