@@ -76,7 +76,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         if (aBoolean) {
                             switch (v.getId()) {
                                 case R.id.zhihu:
-                                    Matisse.from(SampleActivity.this)
+                                    /*Matisse.from(SampleActivity.this)
                                             .choose(MimeType.ofImage())
                                             .groupByDate(true)
                                             .countable(true)
@@ -93,6 +93,18 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             //.selectedUris(uris)
                                             .thumbnailScale(0.85f)
                                             .imageEngine(new PicassoLoader())
+                                            .forResult(REQUEST_CODE_CHOOSE);*/
+                                    Matisse.from(SampleActivity.this)
+                                            .choose(MimeType.ofImage())
+                                            .showSingleMediaType(true)
+                                            .groupByDate(true)
+                                            .countable(false)
+                                            .maxSelectable(80)
+                                            .spanCount(4)
+                                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                            .theme(R.style.Matisse_Zhihu)
+                                            .thumbnailScale(0.55f)
+                                            .imageEngine(new  PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);
 /*                                    Matisse.from(SampleActivity.this)
                                             .choose(MimeType.of(MimeType.JPEG, MimeType.PNG))
