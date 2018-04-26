@@ -76,7 +76,6 @@ public class MatisseActivity extends AppCompatActivity implements
     private SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
     private SelectionSpec mSpec;
 
-    private AlbumsSpinner mAlbumsSpinner;
     private AlbumsAdapter mAlbumsAdapter;
     private TextView mButtonPreview;
     private TextView mButtonApply;

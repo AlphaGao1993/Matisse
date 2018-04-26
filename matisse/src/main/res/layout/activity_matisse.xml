@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/album_name_all"
-            android:textColor="?attr/bottomToolbar.apply.textColor"
+            android:textColor="?attr/bottomToolbar.toolBar.textColor"
             android:textSize="18sp" />
 
         <TextView
@@ -47,8 +47,8 @@
             android:background="?attr/apply_btn_bg"
             android:foreground="?selectableItemBackground"
             android:paddingBottom="5dp"
-            android:paddingStart="15dp"
             android:paddingEnd="15dp"
+            android:paddingStart="15dp"
             android:paddingTop="5dp"
             android:textColor="?attr/bottomToolbar.apply.textColor"
             android:textSize="16sp" />
@@ -85,7 +85,7 @@
             android:foreground="?selectableItemBackground"
             android:padding="14dp"
             android:text="@string/switch_album"
-            android:textColor="?attr/bottomToolbar.apply.textColor"
+            android:textColor="?attr/bottomToolbar.toolBar.textColor"
             android:textSize="16sp" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:foreground="?selectableItemBackground"
             android:padding="14dp"
             android:text="@string/upload_original"
-            android:textColor="?attr/bottomToolbar.apply.textColor"
+            android:textColor="?attr/bottomToolbar.toolBar.textColor"
             android:textSize="16sp" />
     </FrameLayout>
 

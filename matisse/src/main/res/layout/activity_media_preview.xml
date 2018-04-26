@@ -76,15 +76,17 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:fitsSystemWindows="true">
+        android:clickable="false"
+        android:fitsSystemWindows="true"
+        android:focusable="false">
 
         <com.zhihu.matisse.internal.ui.widget.CheckView
             android:id="@+id/check_view"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
+            android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="10dp"
-            android:layout_gravity="center_vertical|end" />
+            android:padding="5dp" />
     </FrameLayout>
 
 </RelativeLayout>
