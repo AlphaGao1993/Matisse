@@ -19,12 +19,12 @@ apply plugin: 'checkstyle'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 26
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -36,14 +36,14 @@ android {
     }
 }
 
-ext.supportLibVersion = '27.0.2'
+ext.supportLibVersion = '26.1.0'
 
 uploadArchives {
     repositories.mavenDeployer {
         repository(url: "http://101.132.41.133:8081/repository/android-lib/") {
             authentication(userName: "kid17-Android", password: "kid17.com")
         }
-        pom.version = "0.0.15"
+        pom.version = "0.0.18"
         pom.artifactId = "matisse"
         pom.groupId = "com.yiqizhangda"
     }
@@ -51,10 +51,10 @@ uploadArchives {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:support-v4:${supportLibVersion}"
-    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
-    implementation "com.android.support:support-annotations:${supportLibVersion}"
-    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compileOnly "com.android.support:support-v4:${supportLibVersion}"
+    compileOnly "com.android.support:appcompat-v7:${supportLibVersion}"
+    compileOnly "com.android.support:support-annotations:${supportLibVersion}"
+    compileOnly "com.android.support:recyclerview-v7:${supportLibVersion}"
     implementation 'it.sephiroth.android.library.imagezoom:library:1.0.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //compileOnly 'com.github.bumptech.glide:glide:4.1.1'
