@@ -21,14 +21,18 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -57,7 +61,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.dracula).setOnClickListener(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setAdapter(mAdapter = new UriAdapter());
     }
 
@@ -99,12 +103,13 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .showSingleMediaType(true)
                                             .groupByDate(true)
                                             .countable(false)
-                                            .maxSelectable(80)
+                                            .maxSelectable(300)
                                             .spanCount(4)
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .theme(R.style.Matisse_Zhihu)
                                             .thumbnailScale(0.55f)
-                                            .imageEngine(new  PicassoLoader())
+                                            .selectedUris(uris)
+                                            .imageEngine(new PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);
 /*                                    Matisse.from(SampleActivity.this)
                                             .choose(MimeType.of(MimeType.JPEG, MimeType.PNG))
@@ -182,11 +187,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public void onBindViewHolder(UriViewHolder holder, int position) {
-            holder.mUri.setText(mUris.get(position).toString());
-            holder.mPath.setText(mPaths.get(position));
-
-            holder.mUri.setAlpha(position % 2 == 0 ? 1.0f : 0.54f);
-            holder.mPath.setAlpha(position % 2 == 0 ? 1.0f : 0.54f);
+            Glide.with(holder.itemView.getContext()).load(mUris.get(position)).into(holder.mImage);
         }
 
         @Override
@@ -196,13 +197,11 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
         static class UriViewHolder extends RecyclerView.ViewHolder {
 
-            private TextView mUri;
-            private TextView mPath;
+            private ImageView mImage;
 
             UriViewHolder(View contentView) {
                 super(contentView);
-                mUri = contentView.findViewById(R.id.uri);
-                mPath = contentView.findViewById(R.id.path);
+                mImage = contentView.findViewById(R.id.image);
             }
         }
     }
