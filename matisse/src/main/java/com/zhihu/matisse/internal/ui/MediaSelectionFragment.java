@@ -25,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
@@ -33,6 +34,7 @@ import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.model.AlbumMediaCollection;
 import com.zhihu.matisse.internal.model.SelectedItemCollection;
 import com.zhihu.matisse.internal.ui.adapter.AlbumMediaAdapter;
+import com.zhihu.matisse.internal.ui.widget.DragSelectTouchListener;
 import com.zhihu.matisse.internal.ui.widget.MediaGridInset;
 import com.zhihu.matisse.internal.utils.UIUtils;
 
@@ -103,6 +105,26 @@ public class MediaSelectionFragment extends Fragment implements
         mAdapter.registerCheckStateListener(this);
         mAdapter.registerOnMediaClickListener(this);
         mRecyclerView.setHasFixedSize(true);
+
+        final DragSelectTouchListener mTouchListener = new DragSelectTouchListener();
+        mTouchListener.setSelectListener(new DragSelectTouchListener.onSelectListener() {
+            @Override
+            public void onSelectChange(int start, int end, boolean isSelected) {
+                for (int i = start; i <= end; i++) {
+                    mAdapter.onItemScrollCheckedByPosition(i);
+                }
+            }
+        });
+        mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int position = mRecyclerView.getChildAdapterPosition(v);
+                mAdapter.onItemScrollCheckedByPosition(position);
+                mTouchListener.setStartSelectPosition(position);
+                return true;
+            }
+        });
+        mRecyclerView.addOnItemTouchListener(mTouchListener);
 
         int spanCount;
         if (selectionSpec.gridExpectedSize > 0) {
