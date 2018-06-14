@@ -186,7 +186,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         @Override
-        public void onBindViewHolder(UriViewHolder holder, int position) {
+        public void onBindViewHolder(final UriViewHolder holder, int position) {
             Glide.with(holder.itemView.getContext()).load(mUris.get(position)).into(holder.mImage);
         }
 
@@ -205,5 +205,4 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
-
 }
