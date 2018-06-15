@@ -53,6 +53,7 @@ public final class SelectionSpec {
     public String applyStr = "";
     public ArrayList<Uri> selectedUris = new ArrayList<>();
     public boolean hideCheckView = false;
+    public boolean slideSelect = false;
 
     private SelectionSpec() {
     }
@@ -111,6 +112,7 @@ public final class SelectionSpec {
         groupByDate = false;
         selectedUris.clear();
         hideCheckView = false;
+        slideSelect = false;
     }
 
     public boolean singleSelectionModeEnabled() {

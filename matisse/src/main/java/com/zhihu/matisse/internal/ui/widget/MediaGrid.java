@@ -76,7 +76,7 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
             }
         }
     }
-
+    
     public void preBindMedia(PreBindInfo info) {
         mPreBindInfo = info;
     }
@@ -150,6 +150,11 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
         void onThumbnailClicked(ImageView thumbnail, Item item, RecyclerView.ViewHolder holder);
 
         void onCheckViewClicked(CheckView checkView, Item item, RecyclerView.ViewHolder holder);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     public static class PreBindInfo {

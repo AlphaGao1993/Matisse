@@ -314,4 +314,9 @@ public final class SelectionCreator {
         mSelectionSpec.selectedUris.clear();
         return this;
     }
+
+    public SelectionCreator slideSelect(boolean enable) {
+        mSelectionSpec.slideSelect = enable;
+        return this;
+    }
 }
