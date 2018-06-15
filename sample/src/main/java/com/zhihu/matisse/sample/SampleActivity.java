@@ -109,6 +109,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .theme(R.style.Matisse_Zhihu)
                                             .thumbnailScale(0.55f)
                                             .selectedUris(uris)
+                                            .slideSelect(true)
                                             .imageEngine(new PicassoLoader())
                                             .forResult(REQUEST_CODE_CHOOSE);
 /*                                    Matisse.from(SampleActivity.this)

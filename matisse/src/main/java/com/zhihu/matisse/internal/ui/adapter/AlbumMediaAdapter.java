@@ -25,7 +25,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.SparseBooleanArray;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,13 +33,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
+import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
-import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.model.SelectedItemCollection;
 import com.zhihu.matisse.internal.ui.widget.CheckView;
 import com.zhihu.matisse.internal.ui.widget.MediaGrid;
@@ -48,16 +47,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-
-import kotlin.NoWhenBranchMatchedException;
 
 public class AlbumMediaAdapter extends
         RecyclerViewCursorAdapter<RecyclerView.ViewHolder> implements
@@ -75,7 +68,6 @@ public class AlbumMediaAdapter extends
     private int mImageResize;
     private int mDateCount = 0;
     private Context mContext;
-    private View.OnLongClickListener mLongClickListener;
     /**
      * key: the position of RecyclerView position
      * value: the position of cursor position
@@ -91,6 +83,8 @@ public class AlbumMediaAdapter extends
 
     private List<String> mDateList = new ArrayList<>();
     private List<Uri> mSelectedUris;
+
+    private View.OnClickListener mClickListener;
 
     public AlbumMediaAdapter(Context context, SelectedItemCollection selectedCollection, RecyclerView recyclerView, List<Uri> selectedUris) {
         super(null);
@@ -230,13 +224,40 @@ public class AlbumMediaAdapter extends
             mediaViewHolder.mMediaGrid.setOnMediaGridClickListener(this);
             setCheckStatus(item, mediaViewHolder.mMediaGrid);
 
-            if (mLongClickListener != null) {
-                mediaViewHolder.mMediaGrid.findViewById(R.id.media_thumbnail).setOnLongClickListener(new View.OnLongClickListener() {
+            if (mClickListener != null && mSelectionSpec.slideSelect) {
+                View.OnTouchListener touchListener = new View.OnTouchListener() {
+                    private boolean isMoved = false;
+                    private boolean isSelectActive = false;
+                    float startX, startY;
+
                     @Override
-                    public boolean onLongClick(View v) {
-                        return mLongClickListener.onLongClick(mediaViewHolder.itemView);
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                            case MotionEvent.ACTION_POINTER_DOWN:
+                                startX = event.getX();
+                                startY = event.getY();
+                            case MotionEvent.ACTION_POINTER_UP:
+                            case MotionEvent.ACTION_UP:
+                                isSelectActive = false;
+                                if (!isMoved) {
+                                    mediaViewHolder.mMediaGrid.performClick();
+                                }
+                                isMoved = false;
+                            case MotionEvent.ACTION_MOVE:
+                                isMoved = true;
+                                if (!isSelectActive && Math.abs(event.getX() - startX) - Math.abs(event.getY() - startY) > 30) {
+                                    isSelectActive = true;
+                                    mClickListener.onClick(mediaViewHolder.itemView);
+                                }
+                            default:
+                                break;
+                        }
+                        return false;
                     }
-                });
+                };
+                mediaViewHolder.itemView.findViewById(R.id.media_thumbnail).setOnTouchListener(touchListener);
+                mediaViewHolder.itemView.findViewById(R.id.check_view).setOnTouchListener(touchListener);
             }
         } else if (holder instanceof MediaDateViewHolder) {
             MediaDateViewHolder mediaDateViewHolder = (MediaDateViewHolder) holder;
@@ -368,8 +389,8 @@ public class AlbumMediaAdapter extends
         }
     }
 
-    public void setOnLongClickListener(View.OnLongClickListener listener) {
-        mLongClickListener = listener;
+    public void setOnClickListener(View.OnClickListener listener) {
+        mClickListener = listener;
     }
 
     @Override
