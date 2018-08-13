@@ -102,6 +102,7 @@ public class Item implements Parcelable {
     }
 
     public boolean isImage() {
+        if (mimeType == null) return false;
         return mimeType.equals(MimeType.JPEG.toString())
                 || mimeType.equals(MimeType.PNG.toString())
                 || mimeType.equals(MimeType.GIF.toString())
@@ -114,6 +115,7 @@ public class Item implements Parcelable {
     }
 
     public boolean isVideo() {
+        if (mimeType == null) return false;
         return mimeType.equals(MimeType.MPEG.toString())
                 || mimeType.equals(MimeType.MP4.toString())
                 || mimeType.equals(MimeType.QUICKTIME.toString())
@@ -134,9 +136,9 @@ public class Item implements Parcelable {
         Item other = (Item) obj;
         return id == other.id
                 && (mimeType != null && mimeType.equals(other.mimeType)
-                    || (mimeType == null && other.mimeType == null))
+                || (mimeType == null && other.mimeType == null))
                 && (uri != null && uri.equals(other.uri)
-                    || (uri == null && other.uri == null))
+                || (uri == null && other.uri == null))
                 && size == other.size
                 && duration == other.duration;
     }

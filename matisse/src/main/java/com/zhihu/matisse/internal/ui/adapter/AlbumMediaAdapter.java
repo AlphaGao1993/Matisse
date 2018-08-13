@@ -223,7 +223,9 @@ public class AlbumMediaAdapter extends
             } else {
                 curPos = viewToCursorMap.get(holder.getAdapterPosition());
             }
-            mediaDateViewHolder.mDate.setText(mDateList.get(cursorToDateMap.get(curPos)));
+            int pos = cursorToDateMap.get(curPos);
+            if (pos < mDateList.size())
+                mediaDateViewHolder.mDate.setText(mDateList.get(pos));
         }
     }
 
