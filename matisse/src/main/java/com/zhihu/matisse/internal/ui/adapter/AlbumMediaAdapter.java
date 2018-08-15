@@ -217,9 +217,10 @@ public class AlbumMediaAdapter extends
         } else if (holder instanceof MediaDateViewHolder) {
             MediaDateViewHolder mediaDateViewHolder = (MediaDateViewHolder) holder;
             mediaDateViewHolder.mDate.setText("");
-            int curPos;
+            int curPos = 0;
             if (viewToCursorMap.get(holder.getAdapterPosition()) == null) {
-                curPos = viewToCursorMap.get(holder.getAdapterPosition() + 1);
+                if (viewToCursorMap.get(holder.getAdapterPosition() + 1) != null)
+                    curPos = viewToCursorMap.get(holder.getAdapterPosition() + 1);
             } else {
                 curPos = viewToCursorMap.get(holder.getAdapterPosition());
             }
