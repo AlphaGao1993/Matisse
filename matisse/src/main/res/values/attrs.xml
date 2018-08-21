@@ -34,4 +34,5 @@
     <attr name="item.checkCircle.borderColor" format="reference|color" />
     <attr name="capture.textColor" format="reference|color" />
     <attr name="apply_btn_bg" format="reference" />
+    <attr name="bottomToolbar.toolBar.textColor" format="reference|color" />
 </resources>

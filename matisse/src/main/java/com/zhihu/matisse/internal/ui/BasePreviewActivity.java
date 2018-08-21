@@ -122,6 +122,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
                 Item item = mAdapter.getMediaItem(mPager.getCurrentItem());
                 if (mSelectedCollection.isSelected(item)) {
                     mSelectedCollection.remove(item);
+                    if (mSpec.selectedUris.contains(item.uri)) {
+                        mSpec.selectedUris.remove(item.uri);
+                    }
                     if (mSpec.countable) {
                         mCheckView.setCheckedNum(CheckView.UNCHECKED);
                     } else {
@@ -130,6 +133,9 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
                 } else {
                     if (assertAddSelection(item)) {
                         mSelectedCollection.add(item);
+                        if (!mSpec.selectedUris.contains(item.uri)) {
+                            mSpec.selectedUris.add(item.uri);
+                        }
                         if (mSpec.countable) {
                             mCheckView.setCheckedNum(mSelectedCollection.checkedNumOf(item));
                         } else {

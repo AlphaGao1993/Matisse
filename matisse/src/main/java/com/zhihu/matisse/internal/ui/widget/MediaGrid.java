@@ -17,13 +17,16 @@ package com.zhihu.matisse.internal.ui.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.SelectionCreator;
@@ -73,7 +76,7 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
             }
         }
     }
-
+    
     public void preBindMedia(PreBindInfo info) {
         mPreBindInfo = info;
     }
@@ -147,6 +150,11 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
         void onThumbnailClicked(ImageView thumbnail, Item item, RecyclerView.ViewHolder holder);
 
         void onCheckViewClicked(CheckView checkView, Item item, RecyclerView.ViewHolder holder);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     public static class PreBindInfo {
