@@ -142,9 +142,8 @@ public class AlbumMediaAdapter extends
                 if (cursorToDateMap.size() > 1
                     && cursorToDateMap.get(cursorPos) != cursorToDateMap.get(cursorPos - 1)) {
                     viewToCursorMap.put(viewToCursorMap.size(), -1);
-                } else {
-                    viewToCursorMap.put(viewToCursorMap.size(), cursorPos);
                 }
+                viewToCursorMap.put(viewToCursorMap.size(), cursorPos);
             }
         }
         return mDateList.size();
