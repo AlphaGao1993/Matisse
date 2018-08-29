@@ -138,11 +138,11 @@ public class AlbumMediaAdapter extends
                 cursorToDateMap.put(mCursor.getPosition(), mDateList.size() - 1);
 
                 //如果当前索引对应的日期与上一个索引对应的日期不同，则表示应该增加一个日期占位符
-                //否则增加view pos 与 cursor 的对应关系
                 if (cursorToDateMap.size() > 1
                     && cursorToDateMap.get(cursorPos) != cursorToDateMap.get(cursorPos - 1)) {
                     viewToCursorMap.put(viewToCursorMap.size(), -1);
                 }
+                //增加view pos 与 cursor 的对应关系
                 viewToCursorMap.put(viewToCursorMap.size(), cursorPos);
             }
         }
