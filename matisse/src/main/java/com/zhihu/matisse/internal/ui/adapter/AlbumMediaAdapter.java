@@ -283,7 +283,7 @@ public class AlbumMediaAdapter extends
                 curPos = viewToCursorMap.get(holder.getAdapterPosition());
             }
             int pos = cursorToDateMap.get(curPos);
-            if (pos < mDateList.size()) {
+            if (pos < mDateList.size() && pos >= 0) {
                 mediaDateViewHolder.mDate.setText(mDateList.get(pos));
             }
         }
